@@ -7,16 +7,21 @@ import smtplib, ssl
 import requests
 import cv2
 import boto3
+import random
 from cvzone.HandTrackingModule import HandDetector
 import time
 import pyttsx3
 import openai
 from tkinter import *
 from math import *
-key='open ai key'
-def open_notepad():
-    os.system("notepad")
-    # Your function code here
+import tkinter
+from tkinter.messagebox import *
+from tkinter.filedialog import *
+import speech_recognition as sr
+import YouTubeMusicAPI
+
+    
+key='<key for chat-gpt>'
 def open_browser():
     os.system("start msedge")
 
@@ -41,7 +46,6 @@ def open_linuxworld():
 def send_whatsapp_message():
     number = number_entry.get()    
     message = message_entry.get()
-    
 
     if message and number:
         pwk.sendwhatmsg_instantly("+91" + number, message)
@@ -50,6 +54,16 @@ def send_whatsapp_message():
 
     message_entry.delete(0, tk.END)
     number_entry.delete(0, tk.END)
+def play_song():
+    song_name = song_entry.get()
+    query = song_name
+
+    result = YouTubeMusicAPI.search(query)
+
+    if result:
+        os.system("start msedge " + result["url"])
+    else:
+        print("No Result Found")
 
 def search_video():
     video_name = video_entry.get()
@@ -62,13 +76,13 @@ def search_video():
 
 def send_email():
     receiver_email = email_entry.get()
-    password = "access key"
+    password = "<Generated app password>"
     message_email = email_message_entry.get()
 
     if receiver_email and message_email:
         port = 465
         smtp_server = "smtp.gmail.com"
-        sender_email = "sender mail"
+        sender_email = "<Your Email Address>"
 
         context = ssl.create_default_context()
         with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
@@ -250,16 +264,13 @@ def calculator():
     Label(main, text = "Enter Num 2:").grid(row=1)
     Label(main, text = "The Answer is:").grid(row=2)
 
-
     num1 = Entry(main)
     num2 = Entry(main)
     blank = Entry(main)
 
-
     num1.grid(row=0, column=1)
     num2.grid(row=1, column=1)
     blank.grid(row=2, column=1)
-
 
     Button(main, text='Quit', command=main.destroy).grid(row=4, column=0, sticky=W)
     Button(main, text='Add', command=add).grid(row=0, column=3, sticky=W,)
@@ -269,7 +280,6 @@ def calculator():
     Button(main, text='^2', command=sq).grid(row=0, column=7, sticky=W)
     Button(main, text='Sqrt', command=sqrtt).grid(row=0, column=8, sticky=W)
     Button(main, text='Clear', command=clear).grid(row=0, column=9, sticky=W)
-
 
 def weather_fore():
     import tkinter as tk
@@ -347,11 +357,10 @@ def img_reko():
 
     def labels_id():
         def detect_labels(image_path):
-            aws_access_key = 'access key'
-            aws_secret_key = 'secret key'
+            aws_access_key = '<AWS Access Key>'
+            aws_secret_key = '<AWS Secret Key>'
 
             client = boto3.client('rekognition', aws_access_key_id=aws_access_key, aws_secret_access_key=aws_secret_key, region_name='ap-south-1')
-
 
             with open(image_path, 'rb') as image_file:
                 image_bytes = image_file.read()
@@ -369,7 +378,6 @@ def img_reko():
                 q=f"- {label['Name']} (Confidence: {label['Confidence']:.2f}%)"
                 labels_id_output.insert(tk.END, q)
                 print(q)
-
 
         if __name__ == "__main__":
             main()
@@ -462,8 +470,6 @@ def paint():
             self.pen_button = ttk.Button(self.tool_frame, text="Pen", command=self.select_pen_tool)
             self.pen_button.pack(side=tk.TOP, padx=5, pady=5)
 
-
-
             self.brush_size_label = ttk.Label(self.tool_frame, text="Brush Size:")
             self.brush_size_label.pack(side=tk.TOP, padx=5, pady=5)
 
@@ -497,8 +503,6 @@ def paint():
 
         def select_pen_tool(self):
             self.selected_tool = "pen"
-
-
 
         def select_size(self, size):
             self.selected_size = size
@@ -569,7 +573,7 @@ def paint():
         app = PaintApp(root)
         root.mainloop()
 def team_17():
-    os.system("start msedge 3.111.150.109")
+    os.system("start msedge 13.233.92.181")
 
     
 def translate():
@@ -577,8 +581,8 @@ def translate():
 
     def translate_text(text, source_language_code, target_language_code):
         session = boto3.Session(
-            aws_access_key_id='access key',
-            aws_secret_access_key='secret key',
+            aws_access_key_id='<AWS access key>',
+            aws_secret_access_key='<AWS Secret key>',
             region_name='ap-south-1'
         )
 
@@ -631,8 +635,325 @@ def translate():
     # Start the Tkinter event loop
     root.mainloop()
 
+def notepad():
 
+    class Notepad:
 
+        __root = Tk()
+
+        # default window width and height
+        __thisWidth = 300
+        __thisHeight = 300
+        _thisTextArea = Text(_root)
+        _thisMenuBar = Menu(_root)
+        _thisFileMenu = Menu(_thisMenuBar, tearoff=0)
+        _thisEditMenu = Menu(_thisMenuBar, tearoff=0)
+        _thisHelpMenu = Menu(_thisMenuBar, tearoff=0)
+
+        # To add scrollbar
+        _thisScrollBar = Scrollbar(_thisTextArea) 
+        __file = None
+
+        def __init__(self,**kwargs):
+
+            # Set icon
+            try:
+                    self.__root.wm_iconbitmap("Notepad.ico")
+            except:
+                    pass
+
+            # Set window size (the default is 300x300)
+
+            try:
+                self.__thisWidth = kwargs['width']
+            except KeyError:
+                pass
+
+            try:
+                self.__thisHeight = kwargs['height']
+            except KeyError:
+                pass
+
+            # Set the window text
+            self.__root.title("Untitled - Notepad")
+
+            # Center the window
+            screenWidth = self.__root.winfo_screenwidth()
+            screenHeight = self.__root.winfo_screenheight()
+
+            # For left-align
+            left = (screenWidth / 2) - (self.__thisWidth / 2)
+
+            # For right-align
+            top = (screenHeight / 2) - (self.__thisHeight /2)
+
+            # For top and bottom
+            self._root.geometry('%dx%d+%d+%d' % (self._thisWidth,
+                                                self.__thisHeight,
+                                                left, top))
+
+            # To make the textarea auto resizable
+            self.__root.grid_rowconfigure(0, weight=1)
+            self.__root.grid_columnconfigure(0, weight=1)
+
+            # Add controls (widget)
+            self.__thisTextArea.grid(sticky = N + E + S + W)
+
+            # To open new file
+            self.__thisFileMenu.add_command(label="New",
+                                            command=self.__newFile)
+
+            # To open a already existing file
+            self.__thisFileMenu.add_command(label="Open",
+                                            command=self.__openFile)
+
+            # To save current file
+            self.__thisFileMenu.add_command(label="Save",
+                                            command=self.__saveFile)
+
+            # To create a line in the dialog
+            self.__thisFileMenu.add_separator()
+            self.__thisFileMenu.add_command(label="Exit",
+                                            command=self.__quitApplication)
+            self.__thisMenuBar.add_cascade(label="File",
+                                        menu=self.__thisFileMenu)
+
+            # To give a feature of cut
+            self.__thisEditMenu.add_command(label="Cut",
+                                            command=self.__cut)
+
+            # to give a feature of copy
+            self.__thisEditMenu.add_command(label="Copy",
+                                            command=self.__copy)
+
+            # To give a feature of paste
+            self.__thisEditMenu.add_command(label="Paste",
+                                            command=self.__paste)
+
+            # To give a feature of editing
+            self.__thisMenuBar.add_cascade(label="Edit",
+                                        menu=self.__thisEditMenu)
+
+            # To create a feature of description of the notepad
+            self.__thisHelpMenu.add_command(label="About Notepad",
+                                            command=self.__showAbout)
+            self.__thisMenuBar.add_cascade(label="Help",
+                                        menu=self.__thisHelpMenu)
+
+            self._root.config(menu=self._thisMenuBar)
+
+            self.__thisScrollBar.pack(side=RIGHT,fill=Y)
+
+            # Scrollbar will adjust automatically according to the content 
+            self._thisScrollBar.config(command=self._thisTextArea.yview) 
+            self._thisTextArea.config(yscrollcommand=self._thisScrollBar.set)
+
+        def __quitApplication(self):
+            self.__root.destroy()
+            # exit()
+
+        def __showAbout(self):
+            showinfo("Notepad","Mrinal Verma")
+
+        def __openFile(self):
+
+            self.__file = askopenfilename(defaultextension=".txt",
+                                        filetypes=[("All Files","."),
+                                            ("Text Documents","*.txt")])
+
+            if self.__file == "":
+
+                # no file to open
+                self.__file = None
+            else:
+
+                # Try to open the file
+                # set the window title
+                self._root.title(os.path.basename(self._file) + " - Notepad")
+                self.__thisTextArea.delete(1.0,END)
+
+                file = open(self.__file,"r")
+
+                self.__thisTextArea.insert(1.0,file.read())
+
+                file.close()
+
+        def __newFile(self):
+            self.__root.title("Untitled - Notepad")
+            self.__file = None
+            self.__thisTextArea.delete(1.0,END)
+
+        def __saveFile(self):
+
+            if self.__file == None:
+                # Save as new file
+                self.__file = asksaveasfilename(initialfile='Untitled.txt',
+                                                defaultextension=".txt",
+                                                filetypes=[("All Files","."),
+                                                    ("Text Documents","*.txt")])
+
+                if self.__file == "":
+                    self.__file = None
+                else:
+
+                    # Try to save the file
+                    file = open(self.__file,"w")
+                    file.write(self.__thisTextArea.get(1.0,END))
+                    file.close()
+
+                    # Change the window title
+                    self._root.title(os.path.basename(self._file) + " - Notepad")
+
+            else:
+                file = open(self.__file,"w")
+                file.write(self.__thisTextArea.get(1.0,END))
+                file.close()
+
+        def __cut(self):
+            self.__thisTextArea.event_generate("<<Cut>>")
+
+        def __copy(self):
+            self.__thisTextArea.event_generate("<<Copy>>")
+
+        def __paste(self):
+            self.__thisTextArea.event_generate("<<Paste>>")
+
+        def run(self):
+
+            # Run main application
+            self.__root.mainloop()
+
+    # Run main application
+    notepad = Notepad(width=600,height=400)
+    notepad.run()
+    
+def cropvideo():
+    cap=cv2.VideoCapture(0)
+    while True:
+
+        status,photo=cap.read()
+        a=photo[200:450,300:500]
+        photo[0:250,0:200]=a
+        cv2.imshow("myphoto" ,photo)
+        if cv2.waitKey(1)==13:
+            break       
+    cv2.destroyAllWindows()
+    cap.release()
+
+def voicecommand():
+    def voice():
+        r = sr.Recognizer()
+        with sr.Microphone() as source1:
+            r.adjust_for_ambient_noise(source1, duration=0.5)
+            output_label.config(text="Give me a command")
+            output_label.update()
+            audio2 = r.listen(source1, timeout=10, phrase_time_limit=10)  # Will listen to the microphone
+
+            try:
+                MyText = r.recognize_google(audio2)  # Interpret the language
+                ch = MyText.lower()
+                output_label.config(text=ch)
+                os.system(ch)
+            except sr.UnknownValueError:
+                output_label.config(text="Could not understand audio")
+            except sr.RequestError:
+                output_label.config(text="Could not request results")
+
+    # Create the main window
+    root = tk.Tk()
+    root.title("Voice Command App")
+
+    # Create GUI elements
+    start_button = tk.Button(root, text="Start Listening", command=voice)
+    start_button.pack(pady=20)
+
+    output_label = tk.Label(root, text="", font=("Helvetica", 12))
+    output_label.pack()
+
+    # Start the Tkinter event loop
+    root.mainloop()
+
+    
+def game():
+    class GuessNumberGame:
+        def __init__(self, root):
+            self.root = root
+            self.root.title("Guess the Number Game")
+
+            self.target_number = random.randint(1, 100)
+            self.attempts = 0
+
+            self.label = tk.Label(root, text="Guess a number between 1 and 100:")
+            self.label.pack(pady=10)
+
+            self.entry = tk.Entry(root)
+            self.entry.pack(pady=5)
+
+            self.result_label = tk.Label(root, text="")
+            self.result_label.pack(pady=5)
+
+            self.submit_button = tk.Button(root, text="Submit", command=self.check_guess)
+            self.submit_button.pack(pady=10)
+
+            self.new_game_button = tk.Button(root, text="New Game", command=self.new_game)
+            self.new_game_button.pack()
+
+        def check_guess(self):
+            self.attempts += 1
+            user_guess = int(self.entry.get())
+
+            if user_guess < self.target_number:
+                self.result_label.config(text="Higher!")
+            elif user_guess > self.target_number:
+                self.result_label.config(text="Lower!")
+            else:
+                self.result_label.config(text=f"Congratulations! You guessed it in {self.attempts} attempts.")
+                self.submit_button.config(state=tk.DISABLED)
+
+        def new_game(self):
+            self.target_number = random.randint(1, 100)
+            self.attempts = 0
+            self.result_label.config(text="")
+            self.entry.delete(0, tk.END)
+            self.submit_button.config(state=tk.NORMAL)
+
+    if __name__ == "__main__":
+        root = tk.Tk()
+        game = GuessNumberGame(root)
+        root.mainloop()
+
+# def local_ai():
+#     from langchain.document_loaders import TextLoader
+#     from langchain.embeddings import OpenAIEmbeddings
+#     from langchain.text_splitter import CharacterTextSplitter
+#     import os
+#     file=local_ai_path_entry.get()
+#     loader=TextLoader(file_path=file)
+#     document=loader.load()
+#     textChunk=CharacterTextSplitter(chunk_size=1000)
+#     texts=textChunk.split_documents(document)
+#     mykey=""
+#     myembedmodel=OpenAIEmbeddings(openai_api_key=mykey)
+#     os.environ["OPENAI_API_KEY"]=mykey
+#     len(texts)
+#     #print(loader.load()[0].page_content)
+#     from langchain.vectorstores import Pinecone as lpcone
+#     import pinecone
+#     pinecone.init(api_key="ab55c2ec",
+#                   environment="us-west4-gcp-free")
+#     docsearch=lpcone.from_documents(documents=texts, 
+#                           embedding=myembedmodel,
+#                           index_name='mysummmerindex')
+#     from langchain.llms import OpenAI
+#     from langchain.chains import RetrievalQA
+#     qs=RetrievalQA.from_chain_type(
+#                 llm=OpenAI(),
+#                 chain_type="stuff",
+#                 retriever=docsearch.as_retriever()
+#                 )
+#     myquery=local_ai_query_entry.get()
+#     pyttsx3.speak(qs({"query":myquery}))
+#     print(qs({"query":myquery}))
 # Create the main window
 root = tk.Tk()
 root.title("Commands Through Buttons")
@@ -659,8 +980,6 @@ team_17_button = ttk.Button(main_frame, text="The Team 17", command=team_17, )
 team_17_button.pack(fill=tk.X,padx=155,pady=5)
 
 # Add buttons to the main_frame
-notepad_button = ttk.Button(main_frame, text="Open Notepad", command=open_notepad)
-notepad_button.pack(fill=tk.X, padx=20, pady=5)
 
 browser_button = ttk.Button(main_frame, text="Open Browser", command=open_browser)
 browser_button.pack(fill=tk.X, padx=20, pady=5)
@@ -701,6 +1020,17 @@ openpaint_button.pack(fill=tk.X, padx=20, pady=5)
 translate_button = ttk.Button(main_frame, text="translate", command=translate)
 translate_button.pack(fill=tk.X, padx=20, pady=5)
 
+videocrop_button = ttk.Button(main_frame, text="Live Video Crop", command=cropvideo)
+videocrop_button.pack(fill=tk.X, padx=20, pady=5)
+
+voiceassistance_button = ttk.Button(main_frame, text="Command through speech", command=voicecommand)
+voiceassistance_button.pack(fill=tk.X, padx=20, pady=5)
+
+gessnumber_button = ttk.Button(main_frame, text="Guess the number GAME", command=game)
+gessnumber_button.pack(fill=tk.X, padx=20, pady=5)
+
+#yournotepad_button = ttk.Button(main_frame, text="Open notepad", command=notepad)
+#yournotepad_button.pack(fill=tk.X, padx=20, pady=5)
 
 # Create and position the buttons
 button_pomodoro = tk.Button(root, text="Start Pomodoro", command=start_pomodoro, padx=10, pady=5, bg="#ff9800", fg="white")
@@ -711,8 +1041,6 @@ button_stop_pomodoro.pack(pady=10)
 
 timer_label = tk.Label(root, text="", font=("Helvetica", 20), bg="#f0f0f0")
 timer_label.pack()
-
-
 
 # Create entry fields and buttons for additional functionalities
 message_entry = ttk.Entry(main_frame)
@@ -729,6 +1057,12 @@ video_entry.pack(fill=tk.X, padx=20, pady=5)
 
 search_video_button = ttk.Button(main_frame, text="Search Video", command=search_video)
 search_video_button.pack(fill=tk.X, padx=20, pady=5)
+
+song_entry = ttk.Entry(main_frame,)
+song_entry.pack(fill=tk.X, padx=20, pady=5)
+
+play_song_button = ttk.Button(main_frame, text="Play Song", command=play_song)
+play_song_button.pack(fill=tk.X, padx=20, pady=5)
 
 email_entry = ttk.Entry(main_frame)
 email_entry.pack(fill=tk.X, padx=20, pady=5)
@@ -757,7 +1091,16 @@ ai_talks_entry.pack(fill=tk.X, padx=20, pady=5)
 ai_talks_button = ttk.Button(main_frame,text="Ask chat gpt",command=ai_talk)
 ai_talks_button.pack(fill=tk.X, padx=20, pady=5)
 
+# local_ai_path_entry = ttk.Entry(main_frame)
+# local_ai_path_entry.pack(fill=tk.X, padx=20, pady=5)
 
+# local_ai_query_entry = ttk.Entry(main_frame)
+# local_ai_query_entry.pack(fill=tk.X, padx=20, pady=5)
+
+# local_ai_button = ttk.Button(main_frame,text="Ask chat gpt querries from the text file u gave")
+# local_ai_button.pack(fill=tk.X,padx=20,pady=5)
+
+# ... Add more buttons similarly
 
 # Update the scrollable region
 main_frame.update_idletasks()
